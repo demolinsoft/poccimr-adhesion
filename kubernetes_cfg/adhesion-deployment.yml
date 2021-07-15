@@ -1,0 +1,49 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: microservice-adhesion
+  labels:
+    name: microservice-adhesion
+spec:
+  ports:
+    - nodePort: 30163
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: microservice-adhesion
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-adhesion
+spec:
+  selector:
+    matchLabels:
+      app: microservice-adhesion
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: microservice-adhesion
+    spec:
+      containers:
+        - name: microservice-adhesion
+          image: microservice-adhesion:3.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:   # Setting Enviornmental Variables
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config  # name of configMap
+                  key: host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: name
+            
