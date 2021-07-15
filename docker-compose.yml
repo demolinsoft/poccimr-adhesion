@@ -11,16 +11,16 @@ services:
       - "3307:3306"
   #Back-end Spring Boot Application
   microservice-adhesion:
-    image: microservice-adhesion
+    image: bibndiaye/microservice-adhesion
     ports:
       - "1234:1234"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/adhesion?autoReconnect=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "root"
-    build:
-      context: "./"
-      dockerfile: "Dockerfile"
+      # build:
+      #context: "./"
+      #dockerfile: "Dockerfile"
     depends_on:
       - mysql
 #Front-end Angular Application
@@ -31,5 +31,4 @@ services:
 #      depends_on:
 #             - "microservice-adhesion"
 #      ports:
-#             - "81:80"  
-  
+#             - "81:80" 
